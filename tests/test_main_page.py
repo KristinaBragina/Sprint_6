@@ -1,33 +1,18 @@
 import allure
 from page_objects.main_page import MainPage
-from locators.main_page_locators import MainPageLocators
 from conftest import driver
+from data import TestData
 import pytest
 
 
 class TestMainPageFaq:
-    test_data = [
-        (1, 'Сутки — 400 рублей. Оплата курьеру — наличными или картой.'),
-        (2, 'Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, '
-            'можете просто сделать несколько заказов — один за другим.'),
-        (3, 'Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. '
-            'Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. Если мы привезли самокат '
-            '8 мая в 20:30, суточная аренда закончится 9 мая в 20:30.'),
-        (4, 'Только начиная с завтрашнего дня. Но скоро станем расторопнее.'),
-        (5, 'Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку по красивому номеру 1010.'),
-        (6, 'Самокат приезжает к вам с полной зарядкой. Этого хватает на восемь суток — даже если будете кататься '
-            'без передышек и во сне. Зарядка не понадобится.'),
-        (7, 'Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои.'),
-        (8, 'Да, обязательно. Всем самокатов! И Москве, и Московской области.')
-    ]
-
     @allure.title('Проверка раздела "Вопросы о важном"')
     @allure.description('Проверка появления нужного текста при нажатии на каждую иконку развертывания в разделе')
-    @pytest.mark.parametrize("question_number, expected_answer", test_data)
+    @pytest.mark.parametrize('question_number, expected_answer', TestData.test_data_expected_answer_faq)
     def test_click_faq_expand_icons_text_is_expected(self, driver, question_number, expected_answer):
         main_page = MainPage(driver)
-        main_page.scroll_to_element(MainPageLocators.faq_section)
-        main_page.wait_visibility_of_element(MainPageLocators.faq_questions_items[question_number])
-        main_page.click_on_element(MainPageLocators.faq_questions_items[question_number])
-        main_page.wait_visibility_of_element(MainPageLocators.faq_answers_items[question_number])
-        assert main_page.get_text_on_element(MainPageLocators.faq_answers_items[question_number]) == expected_answer
+        main_page.scroll_to_faq_section()
+        main_page.wait_visibility_of_faq_items(question_number)
+        main_page.click_on_faq_items(question_number)
+        main_page.wait_visibility_of_faq_answer(question_number)
+        assert main_page.get_displayed_text_from_faq_answer(question_number) == expected_answer

@@ -39,5 +39,5 @@ class BasePage:
         return self.driver.title
 
     @allure.step('Проверить отображение элемента')
-    def check_display_of_element(self, locator):
+    def check_displaying_of_element(self, locator):
         return self.driver.find_element(*locator).is_displayed()

@@ -35,9 +35,10 @@ class BasePage:
 
     @allure.step('Получить заголовок страницы')
     def get_page_title(self):
-        WebDriverWait(self.driver, 6).until(expected_conditions.presence_of_element_located((By.TAG_NAME, 'title')))
+        WebDriverWait(self.driver, 6).until(expected_conditions.presence_of_element_located(locator))
         return self.driver.title
 
     @allure.step('Проверить отображение элемента')
     def check_displaying_of_element(self, locator):
         return self.driver.find_element(*locator).is_displayed()
+
